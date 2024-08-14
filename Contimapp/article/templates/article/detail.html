@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+    Contimapp    
+{% endblock%}
+
+{% block content %}
+{% load static %}
+
+<div class="flex items-center justify-center w-full mb-10">
+    <div class="text-center">
+        <h1 class="font-semibold text-2xl mt-4 mb-2">Notícia</h1>
+        <div class="w-24 h-1 mx-auto bg-cyan-500 rounded-xl"></div>
+        <!-- Linha curta abaixo do título -->
+    </div>
+</div>
+
+<div class=" m-4 px-6 py-2 bg-gray-100 rounded-xl">
+    <h1 class="text-2xl font-semibold py-3">{{article.title}}</h1>
+    <div class=" text-md mb-10">
+        {{ article.description|linebreaks }}
+    </div>
+    <!--<p class=" text-md">{{article.description}}</p>-->
+    {%if article.link %}
+        <div class="mb-4">
+            <a href="{{article.link}}" class="text-sky-500 hover:text-sky-700">Para mais informações clique aqui.</a>
+        </div>
+    {%endif%}
+</div>
+{% endblock%}

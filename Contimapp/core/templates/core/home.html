@@ -1,0 +1,96 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+    Contimapp    
+{% endblock%}
+
+{% block content %}
+{% load static %}
+
+<div class="w-full overflow-hidden">
+    <img src="{% static 'images/8.png' %}" alt="Imagem" class="w-full h-auto object-cover">
+</div>
+
+
+<div class="mt-6 mb-20 px-6">
+    <div class="flex items-center justify-center w-full mb-10">
+        <div class="text-center">
+            <h1 class="font-semibold text-2xl mt-4 mb-2">Notícias</h1>
+            <div class="w-24 h-1 mx-auto bg-cyan-500 rounded-xl"></div>
+            <!-- Linha curta abaixo do título -->
+        </div>
+    </div>
+
+    <div class="container justify-center mx-auto">
+        <div class="grid grid-rows-1 grid-cols-3 gap-8 place-items-center">
+            {% for article in page_obj.object_list %}
+                <a href="{% url 'article:detail' article.id %}" class="bg-white rounded-lg shadow-md border-2 border-cyan-800 flex flex-col h-full">
+                    <div>
+                            {% if article.image %}
+                                <img src="{{ article.image.url }}" alt="{{ article.title }}" class="w-full h-1/2 rounded-t-lg object-cover border-b-2 border-cyan-800">
+                            {% endif %}
+                            <h2 class="m-2 font-semibold text-lg">{{ article.title }}</h2>
+                            <p class="m-2 text-gray-700">
+                                {{ article.description|slice:":200" }}{% if article.description|length > 200 %}...{% endif %}
+                            </p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+
+        <!-- Navegação da Paginação -->
+        <div class="text-center mt-4">
+            <div class="flex justify-center items-center space-x-2">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="flex items-center px-2 py-1 pagination-link">
+                        <img src="{% static 'images/bb.png' %}" alt="Primeira Página" width="15" height="15">
+                    </a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="flex items-center px-2 py-1 pagination-link">
+                        <img src="{% static 'images/b.png' %}" alt="Página Anterior" width="15" height="15">
+                    </a>
+                {% endif %}
+        
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="flex items-center px-2 py-1 pagination-link">
+                        <img src="{% static 'images/f.png' %}" alt="Próxima Página" width="15" height="15">
+                    </a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="flex items-center px-2 py-1 pagination-link">
+                        <img src="{% static 'images/ff.png' %}" alt="Última Página" width="15" height="15">
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-center mt-2">
+        <div class="flex justify-center items-center rounded-full bg-cyan-100 w-10">
+            <p class="text-md">{{page_obj.number}}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Restaurar a posição da rolagem
+        if (localStorage.getItem('scrollPosition')) {
+            window.scrollTo(0, localStorage.getItem('scrollPosition'));
+            localStorage.removeItem('scrollPosition');
+        }
+
+        // Adicionar evento de clique aos links de paginação
+        document.querySelectorAll('.pagination-link').forEach(function(link) {
+            link.addEventListener('click', function() {
+                localStorage.setItem('scrollPosition', window.scrollY);
+            });
+        });
+    });
+</script>
+  
+<div class="w-full hover:h-full overflow-hidden border-t-2 border-cyan-500">
+    <iframe class="w-full h-80" 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2990.4682051750706!2d-8.263505387931325!3d41.45075939194167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd24ef95abeedf75%3A0xdda51c2cf3f1dec7!2sContima%20-%20consultoria%20fiscal%2C%20Unipessoal%20Lda.!5e0!3m2!1spt-PT!2spt!4v1721512370784!5m2!1spt-PT!2spt" 
+            style="border:0; outline:none;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" frameBorder="0">
+    </iframe>
+</div>
+
+{% endblock%}

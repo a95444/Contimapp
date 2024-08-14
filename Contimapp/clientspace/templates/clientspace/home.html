@@ -1,0 +1,397 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+    Área de Cliente    
+{% endblock%}
+{% load static %}
+{% load custom_filters %}
+{% block content %}
+    <div class="mt-40 m-6 pb-6 grid grid-cols-5 gap-4 bg-cyan-300 bg-opacity-20 rounded-xl
+    shadow-lg shadow-cyan-800/50 h-1/3"> 
+        <div class="col-span-1 px-6 py-4 border-r border-cyan-800">
+            <a href="#" class="text-md font-semibold block px-2 mb-4 border-l-2 border-cyan-500 " id="show-personal-data">Dados Pessoais</a>
+            <a href="#" class="text-md font-semibold block px-2 mb-4 border-l-2 border-cyan-500" id="show-files">Ficheiros</a>
+        </div>  
+        <div class="col-span-4 px-6 py-4 ">
+            <div id="personal-data">
+            <h1 class="text-lg font-semibold pb-3">Dados Pessoais</h1>
+                <div class="pl-4 bg-white rounded-xl py-4 relative
+                shadow-md shadow-cyan-800/50">
+                    <!-- Conteúdo dos Dados Pessoais -->
+                    <p class="text-md mb-4"> <strong> Nome da Empresa: </strong> {{ profile.company_name }}</p>
+                    <p class="text-md mb-4"> <strong> Nome Pessoal: </strong>{{ profile.personal_name }}</p>
+                    <p class="text-md mb-4"> <strong> Número de Telefone: </strong>{{ profile.phone_number }}</p>
+                    <p class="text-md mb-4"> <strong> NIF: </strong>{{ profile.nif }}</p>
+                    {% if  profile.get_passAT %}
+                        <p class="text-md mb-4"> <strong> PassAT: </strong>Configurada</p>
+                    {%else%}
+                        <p class="text-md mb-4"> <strong> PassAT: </strong>Por Configurar</p>
+                    {%endif%}
+                    <p class="text-md mb-4"> <strong> NIF: </strong>{{ profile.niss }}</p>
+                    {% if  profile.get_passSS %}
+                        <p class="text-md mb-4"> <strong> PassSS: </strong>Configurada</p>
+                    {%else%}
+                        <p class="text-md mb-4"> <strong> PassSS: </strong>Por Configurar</p>
+                    {%endif%}
+                    <a href="{% url 'clientspace:update_profile' %}" class=" justify-center text-md font-semibold inline-block mt-6
+                    bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 py-2 px-8 text-md">Alterar dados</a>
+                </div>
+            </div>
+            <div id="files" class="hidden ">
+                <!-- Conteúdo dos Ficheiros -->
+                <div class="">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-lg font-semibold pb-2">Ficheiros Pessoais</h1>
+                        <button id="refresh-page-btn" class="p-2 bg-transparent focus:outline-none">
+                            <img src="{% static 'images/refresh2.png' %}" alt="Refresh" class="w-8 h-8">
+                        </button>
+                    </div>   
+                    {% for file in files %}
+                        <div class="mt-3">
+                            <div class="pt-1 pl-4 pr-4 bg-white rounded-xl flex items-center p-2 relative
+                            shadow-md shadow-cyan-800/50">
+                                <img src="{% static 'images/pdf.png' %}" class="w-10 h-10">
+                                <h2 class="text-md ml-2">{{file.name}}</h2>
+                                <p class="text-gray-500 text-sm absolute left-2/3 transform -translate-x-1/2">{{ file.created_at|format_datetime }}</p>
+                                <div class="ml-auto flex items-center">
+                                    <a href="{{ file.file.url }}" download=" {{ file.name }}" target="_blank" class="text-green-600 hover:text-green-700 hover:underline inline-block ml-4">Transferir</a>
+                                    <a href="{{ file.file.url }}" target="_blank" class="text-cyan-600 hover:text-cyan-700 hover:underline inline-block ml-4">Visualizar</a>
+                                    <a href="{% url 'clientspace:delete_file' file.id %}" class="text-red-600 hover:text-red-700 hover:underline inline-block ml-4">Apagar</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!--Botões dos Documentos-->
+                <div>
+                <!--<a href="{% url 'clientspace:upload_file'%}" class="text-md font-semibold block mt-6
+                    bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 py-2 px-8 text-md inline-block">Upload de Ficheiro</a>-->
+                    <a href="#" class="text-md font-semibold block mt-6 ml-4 bg-cyan-600 text-white rounded-xl
+                    hover:bg-cyan-700 py-2 px-8 text-md inline-block" id="download-certidao-btn">Certidão de Dívida</a>
+
+                    <a href="#" class="text-md font-semibold block mt-6 ml-4 bg-cyan-600 text-white rounded-xl
+                    hover:bg-cyan-700 py-2 px-8 text-md inline-block" id="download-certidaoIRS-btn">Certidão Liquidação IRS</a>
+
+                    <a href="#" class="text-md font-semibold block mt-6 ml-4 bg-cyan-600 text-white rounded-xl
+                    hover:bg-cyan-700 py-2 px-8 text-md inline-block" id="download-comprovativoIRS-btn">Comprovativo IRS</a>
+
+                    <a href="#" class="text-md font-semibold block mt-6 ml-4 bg-cyan-600 text-white rounded-xl
+                    hover:bg-cyan-700 py-2 px-8 text-md inline-block" id="download-comprovativoIES-btn">Comprovativo IES</a>
+
+                    <a href="#" class="text-md font-semibold block mt-6 ml-4 bg-cyan-600 text-white rounded-xl
+                    hover:bg-cyan-700 py-2 px-8 text-md inline-block" id="download-veiculos-btn">Listagem de Veículos</a>
+
+                    <a href="#" class="text-md font-semibold block mt-6 ml-4 bg-amber-500 text-white rounded-xl
+                    hover:bg-amber-600 py-2 px-8 text-md inline-block" id="download_TSU">Guia TSU</a>
+
+                    <!--<a href="{% url 'clientspace:modaltest'%}" class="text-md font-semibold block mt-6 ml-4 bg-cyan-600 text-white rounded-xl
+                    hover:bg-cyan-700 py-2 px-8 text-md inline-block">Página de Testes</a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="downloadModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="downloadModalLabel">Aviso de Download</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    O download foi inicializado e pode levar até <span id="countdown">20</span> segundos. Por favor, atualize a página para visualizar o documento.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="update-page-btn">Atualizar Página</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Error-->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Erro</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    Erro ao aceder à página da AT. Verifique os seus dados de acesso: NIF e Palavra Pass.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Error UK-->
+    <div class="modal fade" id="errorModal_uk" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Erro</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    Erro desconhecido. Tente novamento, em caso de persistência do erro entre em contacto com o desenvolvedor do website: 960345817.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Error - Liq IRS-->
+    <div class="modal fade" id="errorModal_liqIRS" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Aviso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    Não tem certificado disponível.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Error - comp IRS-->
+    <div class="modal fade" id="errorModal_compIRS" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Aviso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    Não tem comprovativos disponíveis.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Error - comp IES-->
+    <div class="modal fade" id="errorModal_compIES" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Aviso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    Não tem comprovativos disponíveis.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Error - Veiculos-->
+    <div class="modal fade" id="errorModal_veiculos" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Aviso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    Não tem veículos registados.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Success-->
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Sucesso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    Documento já está disponível!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('show-personal-data').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.setItem('activeSection', 'personal-data');
+            document.getElementById('personal-data').classList.remove('hidden');
+            document.getElementById('files').classList.add('hidden');
+            document.getElementById('show-personal-data').classList.add('border-cyan-500');
+            document.getElementById('show-files').classList.remove('border-cyan-500');
+        });
+
+        document.getElementById('show-files').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.setItem('activeSection', 'files');
+            document.getElementById('files').classList.remove('hidden');
+            document.getElementById('personal-data').classList.add('hidden');
+            document.getElementById('show-files').classList.add('border-cyan-500');
+            document.getElementById('show-personal-data').classList.remove('border-cyan-500');
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const activeSection = localStorage.getItem('activeSection') || 'personal-data';
+            
+            if (activeSection === 'files') {
+                document.getElementById('files').classList.remove('hidden');
+                document.getElementById('personal-data').classList.add('hidden');
+                document.getElementById('show-files').classList.add('border-cyan-500');
+                document.getElementById('show-personal-data').classList.remove('border-cyan-500');
+            } else {
+                document.getElementById('personal-data').classList.remove('hidden');
+                document.getElementById('files').classList.add('hidden');
+                document.getElementById('show-personal-data').classList.add('border-cyan-500');
+                document.getElementById('show-files').classList.remove('border-cyan-500');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+        var taskResult = "{{ request.session.task_result|escapejs }}";
+        
+        if (taskResult) {
+            if (taskResult === 'error') {
+                $('#errorModal').modal('show');
+            } 
+            else if (taskResult === 'error_liq') {
+                $('#errorModal_liqIRS').modal('show');
+            }
+            else if (taskResult === 'error_compIRS') {
+                $('#errorModal_compIRS').modal('show');
+            }
+            else if (taskResult === 'error_compIES') {
+                $('#errorModal_compIES').modal('show');
+            }
+            else if (taskResult === 'error_veiculos') {
+                $('#errorModal_veiculos').modal('show');
+            }
+            else if (taskResult === 'error_uk') {
+                $('#errorModal_uk').modal('show');
+            }
+            else if (taskResult === 'success') {
+                $('#successModal').modal('show');
+            }
+            
+            // Opcional: limpar o resultado da sessão após o uso
+            fetch("{% url 'clientspace:clear_task_result' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            });
+        }
+    });
+
+        document.getElementById('download-certidao-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Redireciona para a URL que inicia o download
+            window.location.href = "{% url 'clientspace:view_AT' 'divida' %}";
+            $('#downloadModal').modal('show');
+            startCountdown(20);
+    });
+
+        document.getElementById('download-certidaoIRS-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                // Redireciona para a URL que inicia o download
+                window.location.href = "{% url 'clientspace:view_AT' 'liq_IRS' %}";
+                $('#downloadModal').modal('show');
+                startCountdown(20);
+        }); 
+
+        document.getElementById('download-comprovativoIRS-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                // Redireciona para a URL que inicia o download
+                window.location.href = "{% url 'clientspace:view_AT' 'comp_IRS' %}";
+                $('#downloadModal').modal('show');
+                startCountdown(20);
+        });
+
+        document.getElementById('download-comprovativoIES-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                // Redireciona para a URL que inicia o download
+                window.location.href = "{% url 'clientspace:view_AT' 'comp_IES' %}";
+                $('#downloadModal').modal('show');
+                startCountdown(20);
+        });
+
+        document.getElementById('download-veiculos-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                // Redireciona para a URL que inicia o download
+                window.location.href = "{% url 'clientspace:view_AT' 'veiculos' %}";
+                $('#downloadModal').modal('show');
+                startCountdown(20);
+        });
+
+        document.getElementById('download_TSU').addEventListener('click', function(e) {
+                e.preventDefault();
+                // Redireciona para a URL que inicia o download
+                window.location.href = "{% url 'clientspace:view_SS' 'TSU' %}";
+                $('#downloadModal').modal('show');
+                startCountdown(20);
+        });
+
+        document.getElementById('update-page-btn').addEventListener('click', function() {
+            location.reload();
+        });
+
+        document.getElementById('refresh-page-btn').addEventListener('click', function() {
+            location.reload();
+        });
+
+        // Set active section based on localStorage
+
+        function startCountdown(seconds) {
+        var countdownElement = document.getElementById('countdown');
+        countdownElement.textContent = seconds;
+        var interval = setInterval(function() {
+            seconds--;
+            countdownElement.textContent = seconds;
+            if (seconds <= 0) {
+                clearInterval(interval);
+            }
+        }, 1000);
+    }
+    </script>
+{% endblock %}

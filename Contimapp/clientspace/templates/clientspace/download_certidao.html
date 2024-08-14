@@ -1,0 +1,18 @@
+<!-- Template clientspace/download_certidao.html -->
+{% extends 'core/base.html' %}
+
+{% block title %}
+    Download Certidão
+{% endblock %}
+
+{% block content %}
+    <div class="mt-40 m-6 pb-6 bg-cyan-300 bg-opacity-20 rounded-xl shadow-lg shadow-cyan-800/50"> 
+        <div class="px-6 py-4">
+            <h1 class="text-lg font-semibold pb-3">Baixar Certidão de Dívida</h1>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="text-md font-semibold bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 py-2 px-8 text-md">Baixar</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

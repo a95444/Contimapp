@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Iniciar Sessão{%endblock%}
+
+{% block content %}
+
+
+<div class="w-1/2 mt-44 mb-40 mx-auto p-5 bg-cyan-300 bg-opacity-20 rounded-xl
+shadow-lg shadow-cyan-800/50">
+    <h1 class="mb-6 text-3xl">Iniciar Sessão</h1>
+    <form method="post" action=".">
+        {% csrf_token %} <!--cena de segurança que se deve por sempre -->
+ 
+
+        <div class="mb-3">
+            <label class="inline-block mb-2">Nome de Utilizador</label> <br>
+            {{form.username}}
+        </div>
+
+        <div class="mb-3">
+            <label class="inline-block mb-2">Password</label> <br>
+            {{form.password}}
+        </div>
+
+        {% if form.errors or form.non_field_errors%}
+         <div class="mb-3 p-6 bg-red-100 rounded-xl">
+            {%for field in form%}
+                {{ field.errors}}
+            {%endfor%}
+            {{form.non_field_errors}}
+         </div>
+        {%endif%}
+         <br>
+        <button class="py-2 px-8 text-md bg-cyan-600 text-white rounded-xl hover:bg-cyan-700">Submeter</button>
+
+    </form>
+
+</div>
+
+
+{%endblock%}

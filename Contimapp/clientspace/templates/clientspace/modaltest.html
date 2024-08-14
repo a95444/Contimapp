@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+    Área de Cliente    
+{% endblock%}
+{% load static %}
+{% load custom_filters %}
+{% block content %}
+
+<a href="#" class="text-md font-semibold block mt-36 ml-4 bg-cyan-600 text-white rounded-xl
+                hover:bg-cyan-700 py-2 px-8 text-md inline-block" id="download-certidao-btn">Download Certidão de Dívida</a>
+
+    <!-- Modal Error-->
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-red-500 font-semibold" id="errorModalLabel">Erro</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    Erro ao aceder à página da AT. Verifique os seus dados de acesso: NIF e Palavra Pass.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="update-page-btn">Atualizar Página</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        document.getElementById('download-certidao-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            $('#Modal').modal('show');
+    });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

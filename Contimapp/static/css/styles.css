@@ -1,0 +1,76 @@
+/* styles.css */
+
+iframe:focus {
+    outline: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Remove a decoração dos links quando o mouse passa sobre eles */
+a:hover,
+a:focus {
+    text-decoration: none; /* Remove o sublinhado */
+    color: inherit; /* Mantém a cor atual */
+}
+
+/* Remove a decoração dos links quando o link está ativo */
+a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Estilo para o contêiner que envolve o campo de senha e o botão */
+.relative {
+    position: relative;
+}
+
+/* Estilo para o botão de alternância da visibilidade da senha */
+#toggle-password-visibility {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Ajuste conforme necessário */
+    transform: translateY(-50%);
+    background: transparent; /* Fundo transparente para o botão */
+    border: none; /* Remove a borda do botão */
+    cursor: pointer; /* Altera o cursor para pointer */
+    z-index: 10; /* Garante que o botão esteja acima do campo */
+}
+
+#toggle-password-visibility:focus {
+    outline: none; /* Remove o contorno padrão */
+    box-shadow: none; /* Remove qualquer sombra que possa ser aplicada ao foco */
+}
+
+/* Adiciona padding ao campo para deixar espaço para o botão */
+input[name="passAT"] {
+    padding-right: 2.5rem; /* Ajuste conforme necessário para dar espaço ao botão */
+}
+
+/* Remove a borda vermelha dos campos de entrada */
+input:focus, 
+textarea:focus, 
+select:focus {
+    outline: none; /* Remove o contorno de foco padrão */
+    border: 1px solid #ccc; /* Define uma borda padrão que pode ser ajustada */
+    box-shadow: none; /* Remove qualquer sombra aplicada ao foco */
+}
+
+/* Remove a borda vermelha se for aplicada por um estilo de erro específico */
+input.error, 
+textarea.error, 
+select.error {
+    border: 1px solid #ccc; /* Define a borda padrão */
+    box-shadow: none; /* Remove qualquer sombra */
+}
+
+.sidebar-link {
+    border-left: 2px solid #4a5568; /* Cor de borda mais escura */
+}
+
+/* Defina a cor de borda clara para o item selecionado */
+.sidebar-link.selected {
+    border-left: 2px solid #06b6d4; /* Cor de borda cian clara */
+}

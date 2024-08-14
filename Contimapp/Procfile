@@ -1,0 +1,2 @@
+release: python manage.py migrate
+celery: celery -A Contimapp worker --loglevel=info

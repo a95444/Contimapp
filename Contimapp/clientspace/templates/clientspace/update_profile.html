@@ -1,0 +1,115 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+{% load static %}
+<div class="mt-32 mb-10 ml-6 mr-6 px-4 py-2 bg-cyan-300 bg-opacity-20 rounded-xl
+shadow-lg shadow-cyan-800/50">
+    <h2 class="text-black text-lg font-semibold">Atualizar Dados do Perfil</h2>
+    <form method="post">
+        {% csrf_token %}
+        <!--{{ form.as_p }}-->
+
+        <div class="mt-5 mb-4">
+            <label class="inline-block mb-2">Nome Empresa</label> <br>
+            {{form.company_name}}
+        </div>
+
+        <div class="mb-4">
+            <label class="inline-block mb-2">Nome Pessoal</label> <br>
+            {{form.personal_name}}
+        </div>
+
+        <div class="mb-4">
+            <label class="inline-block mb-2">Telemóvel/Telefone</label> <br>
+            {{form.phone_number}}
+        </div>
+        
+        <div class="mb-2">
+            <label class="inline-block mb-2">NIF</label> <br>
+            {{form.nif}}
+        </div>
+
+        <div class="mb-2">
+            <label class="inline-block mb-2">Palavra Pass AT</label> <br>
+            <div class="relative">
+                <input type="password" name="passAT" id="id_passAT" class="w-full py-4 px-6 rounded-xl" placeholder="Palavra Passe AT">
+                <button type="button" id="toggle-password-visibilityAT" style="position: absolute; right: 10px; top: 10px; outline: none; box-shadow: none;">
+                    <img src="{% static 'images/eyeopen.png' %}" alt="Mostrar senha" width="30" height="30">
+                </button>
+            </div>
+        </div>
+        
+        <div class="mb-2">
+            <label class="inline-block mb-2">NISS</label> <br>
+            {{ form.niss }}
+        </div>
+        
+        <div class="mb-2">
+            <label class="inline-block mb-2">Palavra Pass SS</label> <br>
+            <div class="relative">
+                <input type="password" name="passSS" id="id_passSS" class="w-full py-4 px-6 rounded-xl" placeholder="Palavra Passe SS">
+                <button type="button" id="toggle-password-visibilitySS" style="position: absolute; right: 10px; top: 10px; outline: none; box-shadow: none;">
+                    <img src="{% static 'images/eyeopen.png' %}" alt="Mostrar senha" width="30" height="30">
+                </button>
+            </div>
+        </div>
+        
+        {% if form.errors or form.non_field_errors %}
+        <div class="mb-3 p-6 bg-red-100 rounded-xl">
+            {% for field in form %}
+                {{ field.errors }}
+            {% endfor %}
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+        <br>
+        
+        <button class="py-2 px-8 text-md bg-cyan-600 text-white rounded-xl hover:bg-cyan-700" type="submit">Salvar</button>
+    </form>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const passwordFieldAT = document.querySelector('input[name="passAT"]');
+    const passwordFieldSS = document.querySelector('input[name="passSS"]');
+    const toggleButtonAT = document.querySelector('#toggle-password-visibilityAT');
+    const toggleButtonSS = document.querySelector('#toggle-password-visibilitySS');
+    
+    // Defina as URLs das imagens
+    const eyeOpenUrl = "{% static 'images/eyeopen.png' %}";
+    const eyeClosedUrl = "{% static 'images/eyeclosed.png' %}";
+
+    // Função para alternar a visibilidade da senha
+    function togglePasswordVisibilityAT() {
+        if (passwordFieldAT.type === 'password') {
+            passwordFieldAT.type = 'text';
+            toggleButtonAT.innerHTML = `<img src="${eyeClosedUrl}" alt="Ocultar senha" width="30" height="30">`;  // Ícone de olho fechado
+        } else {
+            passwordFieldAT.type = 'password';
+            toggleButtonAT.innerHTML = `<img src="${eyeOpenUrl}" alt="Mostrar senha" width="30" height="30">`;  // Ícone de olho aberto
+        }
+    }
+
+    function togglePasswordVisibilitySS() {
+        if (passwordFieldSS.type === 'password') {
+            passwordFieldSS.type = 'text';
+            toggleButtonSS.innerHTML = `<img src="${eyeClosedUrl}" alt="Ocultar senha" width="30" height="30">`;  // Ícone de olho fechado
+        } else {
+            passwordFieldSS.type = 'password';
+            toggleButtonSS.innerHTML = `<img src="${eyeOpenUrl}" alt="Mostrar senha" width="30" height="30">`;  // Ícone de olho aberto
+        }
+    }
+
+    if (passwordFieldAT && toggleButtonAT) {
+        toggleButtonAT.addEventListener('click', togglePasswordVisibilityAT);
+    }
+
+    if (passwordFieldSS && toggleButtonSS) {
+        toggleButtonSS.addEventListener('click', togglePasswordVisibilitySS);
+    }
+});
+
+</script>
+    
+{% endblock %}
