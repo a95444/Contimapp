@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-a&&2dsyf*v10f-2tv5inizxvp_-a@q4svn%c7*6c9r_ni^i8$7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*'] #especificar o domain
+ALLOWED_HOSTS = ['contimapp.pt'] #especificar o domain
 
 
 # Application definition
